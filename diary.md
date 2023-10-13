@@ -20,3 +20,10 @@
     - path: /ssh
     - contents: <empty>
 
+- RESULT: FAIL
+    - raspbian images no longer include the default user and password
+
+- SOLUTION
+    - instead of using etcher and then manually setting up ssh and the user and wifi
+        just use the pi imager and you can select the custom image but use the cog to
+        setup ssh, wifi and user accounts
