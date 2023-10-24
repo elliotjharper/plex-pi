@@ -42,4 +42,57 @@
         - `ssh -i ~/.ssh/id_rsa <username seen inside ubuntu account>@<ip of pi>`
 
 - set pi up to mount my network shared media on startup so that it shows up to be added to plex as a library
-    - `sefliuaewsfilhueas`
+    - made a mount point
+        - `mkdir /mnt/drive-1`
+    - wrote a file to instruct ubuntu core to mount our share
+        - couldn't get a version of nano through snap store that was compiled for our
+            architecture (arm64) so resorted to using winscp to write the file up
+        - wrote file locally (in this repo)
+        - copied it to home folder
+        - then used ssh to copy it to the correct folder
+            - `sudo cp /home/elltg/drive-1.mount /etc/systemd/system/nas-drive-1.mount`
+        - then restart necessary deamons to make it take effect
+            sudo systemctl daemon-reload
+            sudo systemctl enable nas-drive-1.mount
+            sudo systemctl start nas-drive-1.mount
+        - ERROR: nas-drive-1.mount: Where= setting doesn't match unit name.
+            - had done the where wrong. 
+            - NOTE: MUST match the mount folder to the mount unit file name
+                - this is achieved using `systemd-escape`
+                - explanatory stackoverflow: 
+                    https://unix.stackexchange.com/questions/283442/systemd-mount-fails-where-setting-doesnt-match-unit-name
+            - RESULT: correct path for the mount unit is
+                - `sudo cp /home/elltg/drive-1.mount /etc/systemd/system/mnt-nas\x2ddrive\x2d1.mount`
+            - remove old mount
+                - `sudo systemctl disable nas-drive-1.mount`
+            - ADD CORRECT MOUNT!
+                - `sudo systemctl enable mnt-nasx2ddrivex2d1.mount`
+            - start correct mount
+                - `sudo systemctl start mnt-nasx2ddrivex2d1.mount`
+        - ERROR: still didn't line up.
+        - SOLUTION: just simplified the mount point to not have the hyphens in it
+        
+- REVISED STEPS to setup network share:
+    - used raspberry pi imager
+    - picked pi os 64 lite (latest one with no desktop)
+    - in the imager customised to setup a user and password and enabled SSH access
+    - make a folder to mount at
+        - `sudo mkdir /mnt/nasdrive1`
+    - copy .mount file through ssh to home folder 
+    - copy the file into relevant etc/systemd location
+        - `sudo cp /home/pi/mnt-nasdrive1.mount /etc/systemd/system/mnt-nasdrive1.mount`
+    - register and try to start the mount
+        - `sudo systemctl daemon-reload`
+        - `sudo systemctl enable nasdrive1.mount`
+        - `sudo systemctl start nasdrive1.mount`
+
+- install plexmediaserver via snap store
+    - update everything and ensure that snap store is installed
+        - `sudo apt update`
+        - `sudo apy install snapd`
+    - reboot
+        - `sudo reboot`
+    - install the ubuntu core snap
+        - `sudo snap install core`
+    - install the plexmediaserver snap
+        - `sudo snap install plexmediaserver`

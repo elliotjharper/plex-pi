@@ -1,0 +1,13 @@
+[Unit]
+Description=Mount unit for nas drive 1
+
+[Mount]
+What=//192.168.1.???/???
+Where=/mnt/nasdrive1
+Type=cifs
+Options=username=pi,password=??????
+
+[Install]
+WantedBy=multi-user.target
+Wants=network-online.target
+After=network-online.target
