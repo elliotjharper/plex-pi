@@ -83,13 +83,13 @@
         - `sudo cp /home/pi/mnt-nasdrive1.mount /etc/systemd/system/mnt-nasdrive1.mount`
     - register and try to start the mount
         - `sudo systemctl daemon-reload`
-        - `sudo systemctl enable nasdrive1.mount`
-        - `sudo systemctl start nasdrive1.mount`
+        - `sudo systemctl enable mnt-nasdrive1.mount`
+        - `sudo systemctl start mnt-nasdrive1.mount`
 
 - install plexmediaserver via snap store
     - update everything and ensure that snap store is installed
         - `sudo apt update`
-        - `sudo apy install snapd`
+        - `sudo apt install snapd`
     - reboot
         - `sudo reboot`
     - install the ubuntu core snap
